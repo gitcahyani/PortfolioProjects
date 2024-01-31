@@ -12,11 +12,11 @@ FROM Sales
 
 --sales, cogs, gross_margin_percentage, gross_income
 --result:	gross_margin_percentage cannot be used because it has the same value for all  rows
---			cogs looks like it represents cogs per unit, create all_cogs for cogs * Quantity
---			data in gross_income also cannot be used because the calculation is incorrect
---			create new column margin for margin calculation: Total - all_cogs / Total
---			data in new column margin is still incorrect, because it has over thousands %
---			probably because data in cogs is not correct, therefore i'm going to drop analysis using cogs & margin
+--		cogs looks like it represents cogs per unit, create all_cogs for cogs * Quantity
+--		data in gross_income also cannot be used because the calculation is incorrect
+--		create new column margin for margin calculation: Total - all_cogs / Total
+--		data in new column margin is still incorrect, because it has over thousands %
+--		probably because data in cogs is not correct, therefore i'm going to drop analysis using cogs & margin
 SELECT 
 	Quantity,
 	Total,
@@ -37,7 +37,7 @@ FROM Sales
 --SALES PERFORMANCE
 --total sales per branch & city
 --result:	Branch C Naypyitaw lead the Q1 2019 sales by 34%,
---			followed by Branch B Mandalay and Branch A Yangon by 33% and 32%, respectively
+--		followed by Branch B Mandalay and Branch A Yangon by 33% and 32%, respectively
 SELECT
 	Branch,
 	City,
@@ -49,7 +49,7 @@ ORDER BY 3 DESC
 
 --show total sales monthly
 --result: Jan-19 has the highest sales performance, 
---		  and then dropped by 25%% in Feb-19, and slightly dipped by 0.3% in Mar-19
+--	  and then dropped by 25%% in Feb-19, and slightly dipped by 0.3% in Mar-19
 SELECT
 	CASE
 		WHEN Date BETWEEN '2019-01-01' AND '2019-01-31' THEN '01. January 2019'
@@ -105,7 +105,7 @@ GROUP BY Gender
 ORDER BY 2 DESC
 
 --total sales based on customer_type
---result:	Female Member is the highest spending customer category
+--result: Female Member is the highest spending customer category
 SELECT
 	Customer_type,
 	Gender,
@@ -116,7 +116,7 @@ GROUP BY Customer_type, Gender
 ORDER BY 1, 2 DESC
 
 --sales based on payment
---result:	relatively equal distribution between payment with cash (35%), ewallet(33%) & credit card(30%)
+--result: relatively equal distribution between payment with cash (35%), ewallet(33%) & credit card(30%)
 SELECT
 	Payment,
 	SUM(Total) as total_sales,
@@ -129,8 +129,8 @@ ORDER BY 2 DESC
 
 --customer satisfaction based on rating given 
 --i will define 3 range: 0 - 60 bad experience
---						 61 - 80 okay experience
---						 81 - 100 excellent experience
+--			61 - 80 okay experience
+--			81 - 100 excellent experience
 --checking the min, max, and avg rating value
 SELECT
 	MIN(Rating) as min_rating,
@@ -167,8 +167,8 @@ ORDER BY 2 DESC
 
 -- when is the busiest time in the supermarket?
 -- create 3 time group:	Morning < 12:00:00
---						Noon > 12:00:00 AND < 18:00:00
---						Night > 18:00:00
+--			Noon > 12:00:00 AND < 18:00:00
+--			Night > 18:00:00
 -- result: Noon is the busiest time
 SELECT
 	CASE
@@ -186,4 +186,20 @@ GROUP BY
 		ELSE 'Night'
 	END
 ORDER BY 1 DESC
+
+--Let's say there is an ongoing lucky draw for the top 3 spenders Q1 2019 within single transaction 
+--Find the Invoice_ID list that met this criteria
+SELECT *
+FROM(
+	SELECT
+		City,
+		Invoice_ID,
+		SUM(Total) as total_spend,
+		ROW_NUMBER() OVER (PARTITION BY City ORDER BY SUM(Total) DESC) as spend_rank
+	FROM Sales
+	GROUP BY City,
+		Invoice_ID
+	) as top_spenders
+WHERE spend_rank <= 3
+ORDER BY City, spend_rank
 
