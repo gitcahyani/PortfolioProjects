@@ -4,7 +4,7 @@ SELECT * FROM finpro_ecommerce.order_detail;
 -- Answer: August 2021
 select
 	extract(month from order_date) as mth,
-    round(sum(after_discount),2) as total_order
+    	round(sum(after_discount),2) as total_order
 from
 	order_detail
 where is_valid = 1
@@ -16,7 +16,7 @@ order by 2 desc;
 -- Answer: Mobile & Tablets
 select
 	s.category,
-    round(SUM(o.after_discount),2) as total_sales
+    	round(SUM(o.after_discount),2) as total_sales
 from order_detail o
 left join sku_detail s on o.sku_id = s.id
 where is_valid = 1
@@ -29,12 +29,12 @@ order by 2 desc
 -- Which category that have + growth and - growth?
 select
 	category,
-    sales_2022,
-    sales_2021,
-    case
+    	sales_2022,
+    	sales_2021,
+    	case
 		when sales_2022>sales_2021 then 'positive growth'
-        else 'negative growth'
-    end as remarks
+        	else 'negative growth'
+    	end as remarks
 from
 	(select
 		s.category,
@@ -68,13 +68,13 @@ with
     select
 		o.id,
 		s.sku_name,
-        o.after_discount,
+        	o.after_discount,
 		case
 			when s.sku_name like '%Samsung%' then 'Samsung'
-            when s.sku_name like '%Apple%' then 'Apple'
-            when s.sku_name like '%Sony%' then 'Sony'
-            when s.sku_name like '%Huawei%' then 'Huawei'
-            when s.sku_name like '%Lenovo%' then 'Lenovo'
+            		when s.sku_name like '%Apple%' then 'Apple'
+            		when s.sku_name like '%Sony%' then 'Sony'
+            		when s.sku_name like '%Huawei%' then 'Huawei'
+            		when s.sku_name like '%Lenovo%' then 'Lenovo'
 		end as brand_tag
     from order_detail o
 		left join sku_detail s on o.sku_id = s.id
@@ -83,7 +83,7 @@ with
 
 select
 	brand_tag,
-    round(sum(after_discount),2) as total_sales
+    	round(sum(after_discount),2) as total_sales
 from table_product
 where brand_tag is not null
 group by 1
