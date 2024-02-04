@@ -70,11 +70,14 @@ with
 		s.sku_name,
         	o.after_discount,
 		case
-			when s.sku_name like '%Samsung%' then 'Samsung'
-            		when s.sku_name like '%Apple%' then 'Apple'
-            		when s.sku_name like '%Sony%' then 'Sony'
-            		when s.sku_name like '%Huawei%' then 'Huawei'
-            		when s.sku_name like '%Lenovo%' then 'Lenovo'
+			when lower(s.sku_name) like '%samsung%' then 'Samsung'
+            		when lower(s.sku_name) like '%sony%' then 'Sony'
+            		when lower(s.sku_name) like '%huawei%' then 'Huawei'
+            		when lower(s.sku_name) like '%lenovo%' then 'Lenovo'
+			when lower(s.sku_name) like '%apple%' then 'Apple'
+			when lower(s.sku_name) like '%iphone%' then 'Apple'
+			when lower(s.sku_name) like '%macbook%' then 'Apple'
+			when lower(s.sku_name) like '%ipad%' then 'Apple'
 		end as brand_tag
     from order_detail o
 		left join sku_detail s on o.sku_id = s.id
