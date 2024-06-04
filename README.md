@@ -4,3 +4,5 @@ The dataset sources:
     https://www.kaggle.com/datasets/aungpyaeap/supermarket-sales
 2. E-Commerce (Final Project)
    https://drive.google.com/drive/folders/1utufzAkHQMN0rXcEhXa4WNpxwc8ldjIQ
+3. Electronic Stores
+    https://www.kaggle.com/datasets/kapturovalexander/time-series-for-online-store
